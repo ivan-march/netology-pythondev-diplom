@@ -1,0 +1,90 @@
+# примеры API-запросов
+
+@baseUrl = http://localhost:8000/api
+###
+# получить список всех постов
+GET {{baseUrl}}/posts/
+
+###
+# получить данные поста
+GET {{baseUrl}}/posts/1/
+
+
+# получение объявлений
+# DONE
+GET {{baseUrl}}/advertisements/
+Content-Type: application/json
+
+###
+
+# создание объявления
+# DONE
+POST {{baseUrl}}/advertisements/
+Content-Type: application/json
+Authorization: Token 190663809f9a956605fdcdbcf0c26b10719618de
+
+{
+  "title": "Шкаф IKEA",
+  "description": "Срочно"
+}
+
+###
+
+# попытка поменять объявление
+# DONE
+PATCH {{baseUrl}}/advertisements/7/
+Content-Type: application/json
+Authorization: Token e6fa5b272ae66fde7cf6ad1b91b4014cd0e2e640
+
+{
+  "status": "CLOSED"
+}
+###
+
+# попытка добавить объявление в избранное
+# DONE
+POST {{baseUrl}}/advertisements/6/favorite/
+Authorization: Token e6fa5b272ae66fde7cf6ad1b91b4014cd0e2e640
+
+###
+
+# попытка удалить объявление
+# DONE
+DELETE {{baseUrl}}/advertisements/5/
+Authorization: Token e6fa5b272ae66fde7cf6ad1b91b4014cd0e2e640
+
+###
+
+# фильтрация по создателю
+# DONE
+GET {{baseUrl}}/advertisements/?creator=1
+Content-Type: application/json
+
+###
+
+# фильтрация по дате (до даты)
+# DONE
+GET {{baseUrl}}/advertisements/?created_at_before=2025-05-24
+Content-Type: application/json
+Authorization: Token 190663809f9a956605fdcdbcf0c26b10719618de
+
+###
+
+# попытка добавить объявление статус DRAFT
+# DONE
+POST {{baseUrl}}/advertisements/
+Authorization: Token e6fa5b272ae66fde7cf6ad1b91b4014cd0e2e640
+Content-Type: application/json
+
+{
+  "title": "Продам гараж",
+  "description": "Старый, но добротный.",
+  "status": "DRAFT"
+}
+
+###
+
+# попытка получить все объявления в избранных
+# 
+GET {{baseUrl}}/advertisements/?favorites
+Authorization: Token e6fa5b272ae66fde7cf6ad1b91b4014cd0e2e640
