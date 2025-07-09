@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
 
     'posts',
+    'users'
 ]
 
 MIDDLEWARE = [
@@ -81,9 +82,11 @@ WSGI_APPLICATION = 'social_network.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dj_diplom',
-        'USER': 'adilet',
+        'NAME': 'netology_diplom',
+        'USER': 'postgres',
         'PASSWORD': '1',
+        'HOST': 'localhost',
+        'PORT': 5432
     }
 }
 
@@ -136,3 +139,5 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ],
 }
+
+AUTH_USER_MODEL = 'users.CustomUser'
