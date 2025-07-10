@@ -3,6 +3,8 @@ from .models import Comment, Post
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    author = serializers.PrimaryKeyRelatedField(read_only=True)
+
     class Meta:
         model = Comment
         fields = ['author', 'text', 'created_at']
@@ -21,15 +23,8 @@ class PostSerializer(serializers.ModelSerializer):
 
 
 class PostWriteSerializer(PostSerializer):
-    class Meta(PostSerializer.Meta):
-        fields = PostSerializer.Meta.fields + ['author']
+    author = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
-    def create(self, validated_data):
-        request = self.context.get('request')
-        if request and request.user.is_authenticated:
-            validated_data['author'] = request.user
-        else:
-            raise serializers.ValidationError({'author': 'Пользователь не авторизован.'})
-        return super().create(validated_data)
-
-
+    class Meta:
+        model = Post
+        fields = ['author', 'text', 'image']
