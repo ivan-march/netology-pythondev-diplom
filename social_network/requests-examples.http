@@ -7,10 +7,28 @@ GET {{baseUrl}}/posts/
 
 ###
 # получить данные поста
-GET {{baseUrl}}/posts/1/
+GET {{baseUrl}}/posts/12/
 
 ### 
 # добавить новый пост (текст + файл)
+# ВЕРСИЯ №1 ДЛЯ ОДНОГО ИЗОБРАЖЕНИЯ - не рабочая, т.к. доп. задание
+# POST {{baseUrl}}/posts/ HTTP/1.1
+# Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+# Authorization: Token e8532630a0afb5ad6b5b94f4966049a736cb9f2d
+
+# ------WebKitFormBoundary7MA4YWxkTrZu0gW
+# Content-Disposition: form-data; name="text"
+
+# Шкаф IKEA
+# ------WebKitFormBoundary7MA4YWxkTrZu0gW
+# Content-Disposition: form-data; name="image"; filename="ikea.jpg"
+# Content-Type: image/jpeg
+
+# < ./ikea.jpg
+# ------WebKitFormBoundary7MA4YWxkTrZu0gW--
+###
+# добавить новый пост (текст, расположение + файлы)
+# ВЕСРИЯ №2 ДЛЯ НЕСКОЛЬКИХ ИЗОБРАЖЕНИЙ - доп. задание
 POST {{baseUrl}}/posts/ HTTP/1.1
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 Authorization: Token e8532630a0afb5ad6b5b94f4966049a736cb9f2d
@@ -18,45 +36,51 @@ Authorization: Token e8532630a0afb5ad6b5b94f4966049a736cb9f2d
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
 Content-Disposition: form-data; name="text"
 
-Шкаф IKEA
+Новый пост new
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="image"; filename="ikea.jpg"
+Content-Disposition: form-data; name="location"
+
+Красная площадь, Москва, Россия
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="images"; filename="file1.jpg"
 Content-Type: image/jpeg
 
-< ./ikea.jpg
-------WebKitFormBoundary7MA4YWxkTrZu0gW--
-
-### 
-# удалить пост
-DELETE {{baseUrl}}/posts/5/
-Authorization: Token e8532630a0afb5ad6b5b94f4966049a736cb9f2d
-
-### 
-# изменить пост: поле 'text'
-PATCH {{baseUrl}}/posts/1/
-Content-Type: application/json
-Authorization: Token e8532630a0afb5ad6b5b94f4966049a736cb9f2d
-
-{
-  "text": "changed"
-}
-
-### 
-# изменить файл изображения поста
-PATCH {{baseUrl}}/posts/1/ HTTP/1.1
-Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
-Authorization: Token e8532630a0afb5ad6b5b94f4966049a736cb9f2d
-
+< ./1.jpg
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="image"; filename="ikea.jpg"
+Content-Disposition: form-data; name="images"; filename="file2.jpeg"
 Content-Type: image/jpeg
 
 < ./2.jpeg
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
+### 
+# удалить пост
+DELETE {{baseUrl}}/posts/7/
+Authorization: Token e8532630a0afb5ad6b5b94f4966049a736cb9f2d
+
+### 
+# изменить пост: поле 'text'
+PATCH {{baseUrl}}/posts/12/
+Content-Type: application/json
+Authorization: Token e8532630a0afb5ad6b5b94f4966049a736cb9f2d
+
+{
+  "text": "changed12222221"
+}
+
+### 
+# изменить пост: поле 'location'
+PATCH {{baseUrl}}/posts/12/
+Content-Type: application/json
+Authorization: Token e8532630a0afb5ad6b5b94f4966049a736cb9f2d
+
+{
+  "location": "Киров"
+}
+
 ###
 # добавить комментарий к посту
-POST {{baseUrl}}/posts/6/comment/
+POST {{baseUrl}}/posts/12/comment/
 Content-Type: application/json
 Authorization: Token e8532630a0afb5ad6b5b94f4966049a736cb9f2d
 
@@ -65,63 +89,28 @@ Authorization: Token e8532630a0afb5ad6b5b94f4966049a736cb9f2d
 }
 
 ###
-# добавить лайк к посту
+# добавить/убрать лайк к посту
 POST {{baseUrl}}/posts/7/like/
 Authorization: Token e8532630a0afb5ad6b5b94f4966049a736cb9f2d
 
 ###
+# меняет изображения поста (объект PostImage)
+PATCH {{baseUrl}}/posts/10/ HTTP/1.1
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+Authorization: Token e8532630a0afb5ad6b5b94f4966049a736cb9f2d
 
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="images"; filename="1.jpg"
+Content-Type: image/jpeg
 
+< ./1.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="images"; filename="2.jpeg"
+Content-Type: image/jpeg
 
-
-
-
-
-
-# попытка добавить объявление в избранное
-# DONE
-POST {{baseUrl}}/advertisements/6/favorite/
-Authorization: Token e6fa5b272ae66fde7cf6ad1b91b4014cd0e2e640
-
-###
-
-# попытка удалить объявление
-# DONE
-DELETE {{baseUrl}}/advertisements/5/
-Authorization: Token e6fa5b272ae66fde7cf6ad1b91b4014cd0e2e640
+< ./2.jpeg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
 ###
-
-# фильтрация по создателю
-# DONE
-GET {{baseUrl}}/advertisements/?creator=1
-Content-Type: application/json
-
-###
-
-# фильтрация по дате (до даты)
-# DONE
-GET {{baseUrl}}/advertisements/?created_at_before=2025-05-24
-Content-Type: application/json
-Authorization: Token 190663809f9a956605fdcdbcf0c26b10719618de
-
-###
-
-# попытка добавить объявление статус DRAFT
-# DONE
-POST {{baseUrl}}/advertisements/
-Authorization: Token e6fa5b272ae66fde7cf6ad1b91b4014cd0e2e640
-Content-Type: application/json
-
-{
-  "title": "Продам гараж",
-  "description": "Старый, но добротный.",
-  "status": "DRAFT"
-}
-
-###
-
-# попытка получить все объявления в избранных
-# 
-GET {{baseUrl}}/advertisements/?favorites
-Authorization: Token e6fa5b272ae66fde7cf6ad1b91b4014cd0e2e640
+DELETE {{baseUrl}}/posts/10/images/
+Authorization: Token e8532630a0afb5ad6b5b94f4966049a736cb9f2d
