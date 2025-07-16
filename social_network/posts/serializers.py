@@ -55,8 +55,8 @@ class PostSerializer(serializers.ModelSerializer):
         if obj.latitude and obj.longitude:
             from geopy.geocoders import Nominatim
             try:
-                geolocator = Nominatim(user_agent="post-reverse-geocoder")
-                location = geolocator.reverse(f"{obj.latitude}, {obj.longitude}")
+                geolocator = Nominatim(user_agent='post-reverse-geocoder')
+                location = geolocator.reverse(f'{obj.latitude}, {obj.longitude}')
                 if location:
                     return location.address
             except Exception as e:
@@ -81,10 +81,20 @@ class PostWriteSerializer(PostSerializer):
         write_only=True,
         required=False
     )  # для нескольких image
+    location = serializers.CharField(max_length=255, required=False, allow_blank=True, allow_null=True)
 
     class Meta:
         model = Post
         fields = ['author', 'text', 'images', 'location', 'latitude', 'longitude']
+        read_only_fields = ['latitude', 'longitude']
+
+    def validate_location(self, value):
+        """
+        Валидация поля location.
+        """
+        if value == '':
+            return None
+        return value
 
     def create(self, validated_data):
         """
@@ -96,52 +106,16 @@ class PostWriteSerializer(PostSerializer):
             PostImage.objects.create(post=post, image=image)
         return post
 
-    # def update(self, obj, validated_data):
-    #     """
-    #     Обновление существующего поста с возможностью добавления/обновления изображений.
-    #     """
-    #     print(validated_data)
-
-    #     new_location = validated_data.get('location', None)
-    #     if new_location:
-    #         from geopy.geocoders import Nominatim
-    #         try:
-    #             geolocator = Nominatim(user_agent="post-geocoder")
-    #             location_data = geolocator.geocode(new_location)
-    #             if location_data:
-    #                 validated_data['latitude'] = location_data.latitude
-    #                 validated_data['longitude'] = location_data.longitude
-    #         except Exception as e:
-    #             print(f"Ошибка геокодирования: {e}")
-    #             raise serializers.ValidationError({"location": "Не удалось получить координаты"})
-    #         # Добавляем новое значение location в validated_data
-    #     if 'location' in validated_data:
-    #         print(validated_data['location'])
-    #         validated_data['location'] = new_location  # Теперь DRF сохранит его корректно
-    #     images_data = validated_data.pop('images', [])
-    #     if images_data:
-    #         obj.images.all().delete()
-    #         for image in images_data:
-    #             PostImage.objects.create(post=obj, image=image)
-        
-    #     return super().update(obj, validated_data)
-
-
-    def update(self, instance, validated_data):
-        # Просто передаём данные дальше — всё остальное делает метод save()
+    def update(self, obj, validated_data):
+        """
+        Обновление существующего поста.
+        """
+        obj.location = validated_data.get('location', obj.location)
+        obj.text = validated_data.get('text', obj.text)
         images_data = validated_data.pop('images', [])
-        
-        # Обновляем поля поста
-        instance.location = validated_data.get('location', instance.location)
-        instance.text = validated_data.get('text', instance.text)
-
-        # Обрабатываем изображения
         if images_data:
-            instance.images.all().delete()
+            obj.images.all().delete()
             for image in images_data:
-                PostImage.objects.create(post=instance, image=image)
-
-        # Сохраняем пост → вызывается Post.save(), где происходит геокодирование
-        instance.save()
-
-        return instance
+                PostImage.objects.create(post=obj, image=image)
+        obj.save()
+        return obj

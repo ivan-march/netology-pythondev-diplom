@@ -65,7 +65,7 @@ Content-Type: application/json
 Authorization: Token e8532630a0afb5ad6b5b94f4966049a736cb9f2d
 
 {
-  "text": "changed12222221"
+  "text": "chang3ed12222221"
 }
 
 ### 
@@ -75,7 +75,7 @@ Content-Type: application/json
 Authorization: Token e8532630a0afb5ad6b5b94f4966049a736cb9f2d
 
 {
-  "location": "Киров"
+  "location": "Керчь"
 }
 
 ###
