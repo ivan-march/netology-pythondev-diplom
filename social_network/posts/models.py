@@ -32,30 +32,42 @@ class Post(models.Model):
 
     def __str__(self):
         return f'{self.author} - {self.created_at}'
-    
+
+    def _geocode_location(self, location):
+        """
+        Выполняет геокодирование для указанного location.
+        Возвращает кортеж (latitude, longitude) или (None, None) в случае ошибки или отсутствия данных.
+        """
+        if not location:
+            return None, None
+        
+        from geopy.geocoders import Nominatim
+
+        geolocator = Nominatim(user_agent='post-geocoder')
+        try:
+            location_data = geolocator.geocode(location)
+            if location_data:
+                return location_data.latitude, location_data.longitude
+            return None, None
+        except Exception as e:
+            print(f'Ошибка при геокодировании: {e}')
+            return None, None
+
     def save(self, *args, **kwargs):
         """
-        При сохранение поста проверяет изменение location.
-        Если да, то выполнит запрос в geopy и обновит
-        latitude и longitude.
+        Сохраняет пост, автоматически обновляя координаты только при изменении поля location.
+        Если location пустое или None, очищает latitude и longitude.
         """
-        if self.location:
-            from geopy.geocoders import Nominatim
-            geolocator = Nominatim(user_agent="post-geocoder")
-            try:
-                location_data = geolocator.geocode(self.location)
-                if location_data:
-                    self.latitude = location_data.latitude
-                    self.longitude = location_data.longitude
-                    super().save(update_fields=['latitude', 'longitude'])
-            except Exception as e:
-                print(f"Ошибка при геокодировании: {e}")
-        elif self.longitude and self.latitude and not self.location:
-            self.latitude = None
-            self.longitude = None
+        if self.pk:
+            current = Post.objects.get(pk=self.pk)
+            # Проверяем, изменилось ли поле location или отсутствуют координаты
+            if current.location != self.location or (self.location and (self.latitude is None or self.longitude is None)):
+                self.latitude, self.longitude = self._geocode_location(self.location)
+        else:
+            # Для нового объекта выполняем геокодирование
+            self.latitude, self.longitude = self._geocode_location(self.location)
 
         super().save(*args, **kwargs)
-
 
 
 class PostImage(models.Model):
