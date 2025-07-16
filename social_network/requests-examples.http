@@ -7,28 +7,11 @@ GET {{baseUrl}}/posts/
 
 ###
 # получить данные поста
-GET {{baseUrl}}/posts/12/
+GET {{baseUrl}}/posts/13/
 
-### 
-# добавить новый пост (текст + файл)
-# ВЕРСИЯ №1 ДЛЯ ОДНОГО ИЗОБРАЖЕНИЯ - не рабочая, т.к. доп. задание
-# POST {{baseUrl}}/posts/ HTTP/1.1
-# Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
-# Authorization: Token e8532630a0afb5ad6b5b94f4966049a736cb9f2d
-
-# ------WebKitFormBoundary7MA4YWxkTrZu0gW
-# Content-Disposition: form-data; name="text"
-
-# Шкаф IKEA
-# ------WebKitFormBoundary7MA4YWxkTrZu0gW
-# Content-Disposition: form-data; name="image"; filename="ikea.jpg"
-# Content-Type: image/jpeg
-
-# < ./ikea.jpg
-# ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 ###
 # добавить новый пост (текст, расположение + файлы)
-# ВЕСРИЯ №2 ДЛЯ НЕСКОЛЬКИХ ИЗОБРАЖЕНИЙ - доп. задание
+# ВЕСРИЯ ДЛЯ НЕСКОЛЬКИХ ИЗОБРАЖЕНИЙ - доп. задание
 POST {{baseUrl}}/posts/ HTTP/1.1
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 Authorization: Token e8532630a0afb5ad6b5b94f4966049a736cb9f2d
@@ -36,66 +19,71 @@ Authorization: Token e8532630a0afb5ad6b5b94f4966049a736cb9f2d
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
 Content-Disposition: form-data; name="text"
 
-Новый пост new
+Новый пост new2
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
 Content-Disposition: form-data; name="location"
 
 Красная площадь, Москва, Россия
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="images"; filename="file1.jpg"
+Content-Disposition: form-data; name="images"; filename="test_image1.jpg"
 Content-Type: image/jpeg
 
 < ./1.jpg
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="images"; filename="file2.jpeg"
+Content-Disposition: form-data; name="images"; filename="test_image2.jpeg"
 Content-Type: image/jpeg
 
-< ./2.jpeg
+< ./2.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+Content-Disposition: form-data; name="images"; filename="test_image3.jpeg"
+Content-Type: image/jpeg
+
+< ./3.jpg
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
 ### 
 # удалить пост
-DELETE {{baseUrl}}/posts/7/
+DELETE {{baseUrl}}/posts/12/
 Authorization: Token e8532630a0afb5ad6b5b94f4966049a736cb9f2d
 
 ### 
 # изменить пост: поле 'text'
-PATCH {{baseUrl}}/posts/12/
+PATCH {{baseUrl}}/posts/13/
 Content-Type: application/json
 Authorization: Token e8532630a0afb5ad6b5b94f4966049a736cb9f2d
 
 {
-  "text": "chang3ed12222221"
+  "text": "new text"
 }
 
 ### 
 # изменить пост: поле 'location'
-PATCH {{baseUrl}}/posts/12/
+PATCH {{baseUrl}}/posts/13/
 Content-Type: application/json
 Authorization: Token e8532630a0afb5ad6b5b94f4966049a736cb9f2d
 
 {
-  "location": "Керчь"
+  "location": "Алтай"
 }
 
 ###
 # добавить комментарий к посту
-POST {{baseUrl}}/posts/12/comment/
+POST {{baseUrl}}/posts/13/comment/
 Content-Type: application/json
 Authorization: Token e8532630a0afb5ad6b5b94f4966049a736cb9f2d
 
 {
-  "text": "Классный пост www#6!"
+  "text": "Классный пост Алтай!!!"
 }
 
 ###
 # добавить/убрать лайк к посту
-POST {{baseUrl}}/posts/7/like/
+POST {{baseUrl}}/posts/13/like/
 Authorization: Token e8532630a0afb5ad6b5b94f4966049a736cb9f2d
 
 ###
 # меняет изображения поста (объект PostImage)
-PATCH {{baseUrl}}/posts/10/ HTTP/1.1
+PATCH {{baseUrl}}/posts/13/ HTTP/1.1
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 Authorization: Token e8532630a0afb5ad6b5b94f4966049a736cb9f2d
 
@@ -108,9 +96,9 @@ Content-Type: image/jpeg
 Content-Disposition: form-data; name="images"; filename="2.jpeg"
 Content-Type: image/jpeg
 
-< ./2.jpeg
+< ./2.jpg
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
 ###
-DELETE {{baseUrl}}/posts/10/images/
+DELETE {{baseUrl}}/posts/13/images/
 Authorization: Token e8532630a0afb5ad6b5b94f4966049a736cb9f2d

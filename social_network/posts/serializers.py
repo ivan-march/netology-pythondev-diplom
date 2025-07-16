@@ -61,7 +61,7 @@ class PostSerializer(serializers.ModelSerializer):
                     return location.address
             except Exception as e:
                 print(f'Ошибка при обратном геокодировании: {e}')
-                return None
+                return obj.location
         return obj.location
 
     def get_likes_count(self, obj):
