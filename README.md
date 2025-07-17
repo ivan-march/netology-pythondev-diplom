@@ -32,27 +32,6 @@
 
 ## Структура проекта
 
-```
-social-media-photo-sharing/
-├── manage.py
-├── media/
-│   ├── posts/
-│   └── posts/images/
-├── posts/
-│   ├── __init__.py
-│   ├── admin.py
-│   ├── apps.py
-│   ├── migrations/
-│   ├── models.py
-│   ├── permissions.py
-│   ├── serializers.py
-│   ├── urls.py
-│   └── views.py
-├── requirements.txt
-├── settings.py
-└── urls.py
-```
-
 ### Модели
 
 #### `Post`
